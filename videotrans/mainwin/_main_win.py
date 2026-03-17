@@ -43,6 +43,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.resize(width, height)
         self.setupUi(self)
+        s=AiLoaderThread(self)
+        s.gpu_io.connect(self._start_workers)
+        s.start()
 
 
         self.worker_threads = []
@@ -85,8 +88,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 tr('softsubtitle2')
             ])
         self.uito.emit('load subtitles area...')
-        # Path(HOME_DIR).mkdir(parents=True, exist_ok=True)
-        # Path(TEMP_DIR).mkdir(exist_ok=True, parents=True)
+        
         QTimer.singleShot(200, self._set_Ui_Text)
 
     def _set_Ui_Text(self):
@@ -202,6 +204,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.actionzhipuai_key.setText(tr("Zhipu AI"))
         self.actionsiliconflow_key.setText(tr("SiliconFlow"))
         self.actiondeepseek_key.setText('DeepSeek')
+        self.actionminimax_key.setText('MiniMax AI')
         self.actionqwenmt_key.setText(tr('Ali Qwen3-ASR'))
         self.actionopenrouter_key.setText('OpenRouter.ai')
         self.actionlibretranslate_key.setText("LibreTranslate API")
@@ -326,9 +329,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # set text end
         QApplication.processEvents()
         self.uito.emit('Set default params')
-        s=AiLoaderThread(self)
-        s.gpu_io.connect(self._start_workers)
-        s.start()
+        
         QTimer.singleShot(200, self._set_default)
 
     def _set_default(self):
@@ -588,6 +589,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.actiontts_doubao2.triggered.connect(lambda: self._open_winform('doubao2'))
         self.actionzhipuai_key.triggered.connect(lambda: self._open_winform('zhipuai'))
         self.actiondeepseek_key.triggered.connect(lambda: self._open_winform('deepseek'))
+        self.actionminimax_key.triggered.connect(lambda: self._open_winform('minimax'))
         self.actionqwenmt_key.triggered.connect(lambda: self._open_winform('qwenmt'))
         self.actionopenrouter_key.triggered.connect(lambda: self._open_winform('openrouter'))
         self.actionsiliconflow_key.triggered.connect(lambda: self._open_winform('siliconflow'))
